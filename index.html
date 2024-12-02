@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>MyPathFinder</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 4 References -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <!-- Link to FontAwesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="css/app.css">
+    <!-- Your custom JavaScript -->
+    <script src="js/app.js"></script>
+    <!-- Link to image for the favicon -->
+    <link rel="icon" href="images/Logo.png">
+    <!--Chart JS API-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+    <!-- ONet API-->
+    <script src="js/OnetWebService.js"></script>
+    <script src="js/keyword_search.js"></script>
+    <script src="https://services.onetcenter.org/embed/ip.js?client=community_mis_temple"></script>
+    <!-- <div class="embed-onet-ip"></div> -->
+</head>
+
+<body>
+<!-- header -->
+<nav class="navbar navbar-expand-md fixed-top" id="nav-bar">
+  <!-- Logo -->
+    <a class ="navbar-brand" href="index.html">
+        <img alt="Logo" src="images/Logo.png" style="width:50px;">
+        &nbsp;&nbsp;MyPathFinder
+    </a>
+  
+  <!--Menu sets on the right -->
+  <!--Each individual item can be secured by adding the class: secured -->
+  <ul class="navbar-nav ml-auto">
+      <li class="nav-item secured">
+          <a id="link-logout" class="nav-link" href="#"><i class="fa fa-sign-out"></i> Logout </a>
+      </li>
+  </ul>    
+</nav>
+<br><br><br><br>
+
+<!--Start container for BS4 (Bootstrap 4) formatting-->
+<div class="container-fluid">
+<!--Login-In Form-->
+  <div class="row">
+    <div class="col-md-12 text-center">
+            &nbsp;
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-center">
+            &nbsp;
+    </div>
+    <div class="row">
+      <div class="col-md-12 text-center">
+              &nbsp;
+      </div>
+    </div>  
+  </div>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 content-wrapper" id="div-login" style="display: none;">
+      <form id='form-login'>
+        <label for="username" class = hidden>User name:</label>
+        <input type="text" name="username" id="username" class="form-control" placeholder="Username">
+        <br>
+        <label for="password" class = hidden>Password:</label>
+        <input type="password" name="password" id="password" class="form-control" placeholder="Password">
+        <br>
+        <div class="text-center">
+        <input type="button" value="Login" id="btnLogin" class="btn btn-rounded" style="font-size:2em;width:100%;" >
+        <br><br>
+        <input type="button" value="Sign Up" id="btnSignup" class="btn btn-rounded" style="font-size:2em;width:100%">
+        </div>
+        <br>
+        <div id='login_message' class=""></div>
+      </form>
+    </div>
+    <div class="col-md-2"></div>
+    <br>
+  </div>       
+            
+  <!--Sign-Up Form-->
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 content-wrapper" id="div-signup" style="display: none;">
+        <form id='form-signup'>
+          <label for="newfirstname" class = hidden>First name*</label>
+          <input type="text" name="fname" id="newfirstname" class="form-control" >
+
+          <label for="newlastname" class = hidden>Last name*</label>
+          <input type="text" name="lname" id="newlastname" class="form-control" >
+
+          <label for="newusername" class = hidden>User name*</label>
+          <input type="text" name="username" id="newusername" class="form-control" >
+ 
+          <label for="newpassword" class = hidden>Password*</label>
+          <input type="password" name="password" id="newpassword" class="form-control" >
+         
+          <label for="newpassword2" class = hidden>Password again*</label>
+          <input type="password" id="newpassword2" class="form-control" >
+          <br>            
+          <div class="text-center">
+              <div id='signup_message' class=""></div>
+              <br>
+              <input type="button" value="Make Account" id="btnMakeAccount" class="btn btn-rounded" style="font-size:2em;width:100%;" >
+              <br><br>
+              <input type="button" value="Cancel" id="btnCancel" class="btn btn-rounded" style="font-size:2em;width:100%;" >
+              <br><br>    
+          </div>
+        </form>
+    </div>
+    <!--TIPI Personality Test-->
+    <div class="col-md-8 content-wrapper " id="div-tipi" style="display: none;">
+        <h1>Ten-Item Personality Inventory</h1>
+        <p1>Here are a number of personality traits that may or may not apply to you. 
+          Please write a number next to each statement to indicate the extent to which you agree or disagree with that statement. 
+          You should rate the extent to which the pair of traits applies to you, even if one characteristic applies more strongly than the other.</p1>
+        <br><br>
+    
+        <form id="form-tipi" >
+          <fieldset>
+            <legend>Statement 1:</legend>
+            <p style =" font-size:18px">Extraverted, enthusiastic:</p>
+            <input type ="hidden" id = "createdby" name = "createdby"> 
+            <div id="statement1">
+              <label><input type="radio" name="statement1" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement1" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement1" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement1" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement1" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement1" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement1" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 2:</legend>
+            <p style =" font-size:18px">Critical, quarrelsome:</p>
+            <div id="statement2">
+              <label><input type="radio" name="statement2" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement2" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement2" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement2" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement2" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement2" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement2" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 3:</legend>
+            <p style =" font-size:18px">Dependable, self-disciplined:</p>
+            <div id="statement3">
+              <label><input type="radio" name="statement3" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement3" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement3" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement3" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement3" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement3" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement3" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 4:</legend>
+            <p style =" font-size:18px">Anxious, easily upset:</p>
+            <div id="statement4">
+              <label><input type="radio" name="statement4" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement4" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement4" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement4" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement4" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement4" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement4" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 5:</legend>
+            <p style =" font-size:18px">Open to new experiences, complex:</p>
+            <div id="statement5">
+              <label><input type="radio" name="statement5" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement5" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement5" value="3"> Disagree a little</label>
+              <label> <input type="radio" name="statement5" value="4"> Neither agree nor disagree</label>
+              <label> <input type="radio" name="statement5" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement5" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement5" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 6:</legend>
+            <p style =" font-size:18px">Reserved, quiet:</p>
+            <div id="statement6">
+              <label> <input type="radio" name="statement6" value="1"> Disagree strongly</label>
+              <label> <input type="radio" name="statement6" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement6" value="3"> Disagree a little</label>
+              <label> <input type="radio" name="statement6" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement6" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement6" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement6" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 7:</legend>
+            <p style =" font-size:18px">Sympathetic, warm:</p>
+            <div id="statement7">
+              <label><input type="radio" name="statement7" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement7" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement7" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement7" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement7" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement7" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement7" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 8:</legend>
+            <p style =" font-size:18px">Disorganized, careless:</p>
+            <div id="statement8">
+              <label><input type="radio" name="statement8" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement8" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement8" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement8" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement8" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement8" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement8" value="7"> Agree strongly</label>
+            </div>  
+          </fieldset>
+          <fieldset>
+            <legend>Statement 9:</legend>
+            <p style =" font-size:18px">Calm, emotionally stable:</p>
+            <div id="statement9">
+              <label><input type="radio" name="statement9" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement9" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement9" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement9" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement9" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement9" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement9" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Statement 10:</legend>
+            <p style =" font-size:18px">Conventional, uncreative:</p>
+            <div id="statement10">
+              <label><input type="radio" name="statement10" value="1"> Disagree strongly</label>
+              <label><input type="radio" name="statement10" value="2"> Disagree moderately</label>
+              <label><input type="radio" name="statement10" value="3"> Disagree a little</label>
+              <label><input type="radio" name="statement10" value="4"> Neither agree nor disagree</label>
+              <label><input type="radio" name="statement10" value="5"> Agree a little</label>
+              <label><input type="radio" name="statement10" value="6"> Agree moderately</label>
+              <label><input type="radio" name="statement10" value="7"> Agree strongly</label>
+            </div>
+          </fieldset>
+            <br>
+            <input type="button" value="Submit Results" id="btnSubmitResults" class="btn btn-rounded" style="font-size:2em;width:100%;" >
+            <br>
+            <!--<input type="button" value="Get Results" id="btnGetResults" class="btn btn-rounded" style="font-size:2em;width:100%;"> -->
+          </form>
+          <br>
+          <div id="tipi_message"></div>
+    </div>
+
+    <!--Results-->
+    <div class="col-md-8 content-wrapper " id="div-results" style="display: none;">
+      <h1>Results</h1>
+      <p>Check here for your quiz results</p>
+  
+      <div class = "chartBox1">
+        <canvas id="myChart1" ></canvas>
+      </div>
+    
+      <h1>Find Your Major</h1>
+      <p>Here are recommended majors based on your results.</p> 
+      <!-- <a href="https://www.temple.edu/academics/degree-programs?degree-level%5B0%5D=14&college%5B0%5D=62&degree%5B0%5D=63">Find More Information Here!</a> -->
+  
+      <div id="majors_message"></div>
+      <br><br>
+      
+      <div id="nextlinks"></div>
+
+      <div class="col-md-8 content-wrapper " id="div-onet">
+    
+        <!-- <h1 class="mb-4">Keyword Search Demo</h1> -->
+        
+        <form id="accountForm">
+          <div>
+            <label for="accountName" style="display: none;" >O*NET Web Services username</label>
+            <input type="hidden" class="form-control" id="accountName" aria-describedby="accountNameHelp" value="community_mis_temple">
+            <small id="accountNameHelp" style="display: none;">You must register the domain “<span id="domainOrigin">(not loaded)</span>” in <a target="_blank" href="https://services.onetcenter.org/developer/editorigin">My Account</a></small>
+          </div>
+          <button type="submit" id="accountConnect" class="btn btn-rounded" style="text-align:center;font-size:2em;width:100%;"> Find More Information Here!</button>
+          <br>
+        </form>
+        
+          <div id="connectSuccess">
+          <div id="connectPanel" style="display: none;"class="alert alert-primary my-3">
+            Connected to O*NET Web Services version <span id="connectVersion"></span>
+          </div>
+          
+          <form id="searchForm">
+            <div class="col-md-8 content-wrapper">
+              <label for="searchQuery">Choose a major:</label>
+              <select name="searchQuery" id="searchQuery">
+                <option value="accounting">Accounting</option>
+                <option value="actuarial science">Actuarial Science</option>
+                <option value="business management">Business Management</option>
+                <option value="economics">Economics</option>
+                <option value="entrepreneurship innovation management">Entrepreneurship &amp; Innovation Management</option>
+                <option value="finance">Finance</option>
+                <option value="financial planning">Financial Planning</option>
+                <option value="human resource management">Human Resource Management</option>
+                <option value="international business">International Business</option>
+                <option value="legal studies">Legal Studies</option>
+                <option value="management information systems">Management Information Systems</option>
+                <option value="marketing">Marketing</option>
+                <option value="real estate">Real Estate</option>
+                <option value="risk management insurance">Risk Management &amp; Insurance</option>
+                <option value="statistical science data analytics">Statistical Science and Data Analytics</option>
+                <option value="supply chain management">Supply Chain Management</option>
+              </select>
+              <br><br>
+              <!-- <input type="text" class="form-control" id="searchQuery" placeholder="dental assistant"></input> -->
+            </div>
+            <button type="submit" id="searchSubmit" class="btn btn-rounded" >Submit</button>
+          </form>
+          
+          <div id="searchSuccess">
+            <div id="searchNoResults" class="alert alert-warning my-3">
+              No relevant occupations were found.
+            </div>
+            <div id="searchResults" class="my-3">
+              <p>
+                Most relevant occupations for “<span id="searchQueryEcho"></span>”:
+              </p>
+              <ul>
+                <li id="searchItem0"><span id="searchCode0"></span> &#8212; <span id="searchTitle0"></span> &#8212; bright career outlook: <span id="searchTags0"></span>&#8212; Median Annual Salary: <span id="searchSalary0"></span></li>
+                <li id="searchItem1"><span id="searchCode1"></span> &#8212; <span id="searchTitle1"></span> &#8212; bright career outlook: <span id="searchTags1"></span>&#8212; Median Annual Salary: <span id="searchSalary1"></span></li>
+                <li id="searchItem2"><span id="searchCode2"></span> &#8212; <span id="searchTitle2"></span> &#8212; bright career outlook: <span id="searchTags2"></span>&#8212; Median Annual Salary: <span id="searchSalary2"></span></li>
+                <li id="searchItem3"><span id="searchCode3"></span> &#8212; <span id="searchTitle3"></span> &#8212; bright career outlook: <span id="searchTags3"></span>&#8212; Median Annual Salary: <span id="searchSalary3"></span></li>
+                <li id="searchItem4"><span id="searchCode4"></span> &#8212; <span id="searchTitle4"></span> &#8212; bright career outlook: <span id="searchTags4"></span>&#8212; Median Annual Salary: <span id="searchSalary4"></span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div id="errorPanel" class="alert alert-danger my-3">
+          <span id="errorMessage"></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
+
+
+  <footer class = "container-fluid">
+    <div class="row">
+      <div class="col-md-12 text-center">
+      &copy; 2023 MIS3502 - MyPathFinder - 2023 JK Project
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  init_keyword_search_js()
+</script>
+
+</body>
+</html>
